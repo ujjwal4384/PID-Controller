@@ -1,0 +1,58 @@
+`timescale 1ns / 1ps
+//carry look ahead adder of 4 bit
+
+module carry_look_ahead_4bit(a,b, cin, sum,cout);
+input [3:0] a,b;
+input cin;
+output [3:0] sum;
+output cout;
+wire [3:0] p,g,c;
+xor(p[0],a[0],b[0]);    
+xor(p[1],a[1],b[1]);
+xor(p[2],a[2],b[2]);
+xor(p[3],a[3],b[3]);
+and(g[0],a[0],b[0]);
+and(g[1],a[1],b[1]);
+and(g[2],a[2],b[2]);
+and(g[3],a[3],b[3]);
+wire c1t1;
+and(ct1,cin,p[0]);
+or(c[0],ct1,g[0]);
+wire c2t1,c2t2,c2t3,c2t4;
+and(c2t1,p[0],p[1]);
+and(c2t2,cin,c2t1);
+and(c2t3,g[0],p[1]);
+or(c2t4,c2t3,g[1]);
+or(c[1],c2t4,c2t2);
+wire c3t1,c3t2,c3t3,c3t4,c3t5,c3t6,c3t7;
+and(c3t1,g[1],p[2]);
+and(c3t2,p[1],p[2]);
+and(c3t3,g[0],c3t2);
+and(c3t4,p[0],c3t2);
+and(c3t5,cin,c3t4);
+or(c3t6,c3t1,g[2]); 
+or(c3t7,c3t3,c3t6);
+or(c[2],c3t5,c3t7);
+wire c4t1,c4t2,c4t3,c4t4,c4t5,c4t6,c4t7,c4t8,c4t9,c4t10;
+and(c4t1,g[2],p[3]);
+and(c4t2,p[2],p[3]);
+and(c4t3,g[1],c4t2);
+and(c4t4,p[1],c4t2);
+and(c4t5,g[0],c4t4);
+and(c4t6,p[0],c4t4);
+and(c4t7,cin,c4t6);
+or(c4t8,g[3],c4t1);
+or(c4t9,c4t3,c4t8);
+or(c4t10,c4t9,c4t5);
+or(c[3],c4t10,c4t7);
+wire ts1,ts2,ts3,ts4;
+xor(ts1,a[0],b[0]);
+xor(sum[0],cin,ts1);
+xor(ts2,a[1],b[1]);
+xor(sum[1],c[0],ts2);
+xor(ts3,a[2],b[2]);
+xor(sum[2],c[1],ts3);
+xor(ts4,a[3],b[3]);
+xor(sum[3],c[2],ts4);
+buf(cout,c[3]);
+endmodule
